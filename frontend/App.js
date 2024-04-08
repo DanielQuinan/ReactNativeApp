@@ -1,32 +1,52 @@
-import { StatusBar } from 'expo-status-bar';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, View, Pressable, Alert } from 'react-native';
 
 export default function App() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignUp = async () => {
+    try {
+      let response = await fetch('http://192.168.0.105:3000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      let json = await response.json();
+      if (response.status === 201) {
+        Alert.alert("Sucesso", "Usuário criado com sucesso!");
+      } else {
+        Alert.alert("Erro", json.message || "Não foi possível criar o usuário.");
+      }
+    } catch (error) {
+      Alert.alert("Erro de Rede", "Não foi possível conectar ao servidor.");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.formTitle}>Aquele Login de Cria</Text>
-      <TextInput style={styles.formInput} 
-      placeholder="informe o E-mail"
-      keyboardYpe="email-address"
-      autoCapitalize="none"
-      autoComplete="email"
+      <TextInput
+        style={styles.formInput}
+        placeholder="informe o E-mail"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
-      <TextInput style={styles.formInput}
-      placeholder="Informe a senha"
-      autoCapitalize="none"
-      secureTextEntry
+      <TextInput
+        style={styles.formInput}
+        placeholder="Informe a senha"
+        secureTextEntry
+        autoCapitalize="none"
+        value={password}
+        onChangeText={setPassword}
       />
-      <Pressable style={styles.formButton}>
-        <Text style={styles.formButton}>Logar</Text>
+      <Pressable style={styles.formButton} onPress={handleSignUp}>
+        <Text style={styles.formButtonText}>Cadastrar</Text>
       </Pressable>
-      <View style={styles.subContainer}>
-        <Pressable style={styles.subButton}>
-          <Text style={styles.subTextButton}>Esqueci a Senha</Text>
-        </Pressable>
-        <Pressable style={styles.subButton}>
-          <Text style={styles.subTextButton}>Novo Usuário</Text>
-        </Pressable>
-      </View>
     </View>
   );
 }
