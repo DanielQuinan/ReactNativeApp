@@ -1,24 +1,32 @@
+require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const routes = require('./routes/userRoutes');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/test', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Conectado ao MongoDB Atlas');
 
-})
-.then(()=>console.log('Conectado ao MongoDB'))
-    .catch((err)=> console.log(err));
-}
+        app.use(express.json());
+        app.use('/api/users', routes);
+
+        app.listen(PORT, () => {
+            console.log(`Servidor ouvindo na porta ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Erro ao conectar no MongoDB Atlas:', error);
+    }
+};
+
+main();
 
 app.use(express.json());
 app.use('/api/users', routes);
 
-
-app.listen(PORT, ()=>{
-    console.log('escuchando')
-}); 
