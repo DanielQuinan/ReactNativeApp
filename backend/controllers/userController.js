@@ -38,3 +38,17 @@ exports.deleteUser = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+exports.loginUser = async (req, res) => {
+    try {
+      const user = await userRepository.findByEmail(req.body.email);
+      if (user && await user.comparePassword(req.body.password)) {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ token });
+      } else {
+        res.status(401).json({ message: 'Email ou senha incorretos' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+};
