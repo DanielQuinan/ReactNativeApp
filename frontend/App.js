@@ -7,7 +7,7 @@ export default function App() {
 
   const handleSignUp = async () => {
     try {
-      let response = await fetch('http://192.168.0.105:3000/api/users', {
+      let response = await fetch('http://172.20.10.8:3000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,6 +20,28 @@ export default function App() {
         Alert.alert("Sucesso", "Usuário criado com sucesso!");
       } else {
         Alert.alert("Erro", json.message || "Não foi possível criar o usuário.");
+      }
+    } catch (error) {
+      Alert.alert("Erro de Rede", "Não foi possível conectar ao servidor.");
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      let response = await fetch('http://192.168.0.105:3000/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      let json = await response.json();
+      if (response.status === 200) {
+        // Armazena o token no estado ou em um armazenamento persistente
+        Alert.alert("Sucesso", "Login efetuado com sucesso!");
+      } else {
+        Alert.alert("Erro", json.message || "Não foi possível efetuar o login.");
       }
     } catch (error) {
       Alert.alert("Erro de Rede", "Não foi possível conectar ao servidor.");
