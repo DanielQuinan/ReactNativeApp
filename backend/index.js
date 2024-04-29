@@ -20,6 +20,7 @@ async function main() {
         app.listen(PORT, () => {
             console.log(`Servidor ouvindo na porta ${PORT}`);
         });
+        console.log(process.env.JWT_SECRET)
     } catch (error) {
         console.error('Erro ao conectar no MongoDB Atlas:', error);
     }

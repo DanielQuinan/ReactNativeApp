@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const UserRepository = require('../repositories/UserRepository');
+const jwt = require('jsonwebtoken')
 
 const userRepository = new UserRepository(User);
 
@@ -32,7 +33,7 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        await userRepository.delete(req.params.id);
+        await userRepository.delete(req.params.email);
         res.status(200).json({ message: "Usuário deletado com sucesso" });
     } catch (error) {
         res.status(400).json({ message: error.message });

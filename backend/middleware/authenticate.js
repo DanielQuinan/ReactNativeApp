@@ -4,16 +4,17 @@ const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(' ')[1];
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, 'abc', (err, decoded) => { // Atenção à chave 'abc'
       if (err) {
-        return res.sendStatus(403);
+        return res.status(403).send('Forbidden');
       }
-      req.user = user;
+      req.user = decoded;
       next();
     });
   } else {
-    res.sendStatus(401);
+    res.status(401).send('Unauthorized');
   }
 };
+
 
 module.exports = authenticate;
