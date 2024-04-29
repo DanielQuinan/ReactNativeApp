@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View, Pressable, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const loadToken = async () => {
+      const storedToken = await AsyncStorage.getItem('userToken');
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    };
+    loadToken();
+  }, []);
 
   const handleSignUp = async () => {
     try {
-      let response = await fetch('http://172.20.10.8:3000/api/users', {
+      let response = await fetch('http://192.168.0.108:3000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,17 +40,18 @@ export default function App() {
 
   const handleLogin = async () => {
     try {
-      let response = await fetch('http://192.168.0.105:3000/api/users/login', {
+      let response = await fetch('http://192.168.0.108:3000/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       let json = await response.json();
       if (response.status === 200) {
-        // Armazena o token no estado ou em um armazenamento persistente
+        setToken(json.token);
+        await AsyncStorage.setItem('userToken', json.token);
         Alert.alert("Sucesso", "Login efetuado com sucesso!");
       } else {
         Alert.alert("Erro", json.message || "Não foi possível efetuar o login.");
@@ -69,6 +82,9 @@ export default function App() {
       <Pressable style={styles.formButton} onPress={handleSignUp}>
         <Text style={styles.formButtonText}>Cadastrar</Text>
       </Pressable>
+      <Pressable style={styles.formButton} onPress={handleLogin}>
+        <Text style={styles.formButtonText}>Entrar</Text>
+      </Pressable>
     </View>
   );
 }
@@ -81,10 +97,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   formTitle: {
-      fontSize: 36,
-      fontWeight: 'bold',
-      color: 'pink',
-      margin: 10,
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: 'pink',
+    margin: 10,
   },
   formInput: {
     borderColor: 'pink',
@@ -96,27 +112,15 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   formButton: {
-      backgroundColor: 'pink',
-      width: '80%',
-      margin: 10,
-      padding: 10,
-      borderRadius: 10,
-      alignItems: 'center',
-  },
-  textButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    backgroundColor: 'pink',
     width: '80%',
-  },
-  subContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-  },
-  subButton: {
     padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    margin: 10,
   },
-  subTextButton: {
-    color: 'pink',
+  formButtonText: {
+    color: 'white',
+    fontSize: 18,
   }
 });
