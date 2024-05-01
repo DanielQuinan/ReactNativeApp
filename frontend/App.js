@@ -19,7 +19,7 @@ export default function App() {
 
   const handleSignUp = async () => {
     try {
-      let response = await fetch('http://172.20.10.8:3000/api/users', {
+      let response = await fetch('http://insiraseuip:3000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export default function App() {
 
   const handleLogin = async () => {
     try {
-      let response = await fetch('http://172.20.10.8:3000/api/users/login', {
+      let response = await fetch('http://insiraseuip:3000/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
