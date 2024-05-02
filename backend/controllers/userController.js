@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const UserRepository = require('../repositories/UserRepository');
+const User = require('../models/user');
+const UserRepository = require('../repositories/userRepository');
 const jwt = require('jsonwebtoken')
 
 const userRepository = new UserRepository(User);
