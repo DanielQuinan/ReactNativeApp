@@ -26,7 +26,7 @@ Dentro da pasta frontend, execute em outro terminal:
 ```
 npm install
 ```
-Então, no código do arquivo App.js, nas linhas 22 e 43, inclua seu IPV4 no lugar definido.
+Na versão atual, vá para cada um dos models, e altere o URL do backend pelo do seu computador.
 Então, execute no terminal
 ```
 npx expo start
@@ -61,7 +61,7 @@ http://localhost:3000/api/users/id
 ```
 No corpo raw e json
 ```
-{
+{"name": "nome",
 "email": "email@email.com",
 "password": "senha"
 }
@@ -82,6 +82,33 @@ No corpo raw e json
 ### DELETE de usuário
 ```
 http://localhost:3000/api/users/id
+```
+
+### GET e DELETE de livros
+Da mesma forma, o que muda são os caminhos
+```
+http://localhost:3000/api/books/
+```
+ou para DELETE
+```
+http://localhost:3000/api/books/id
+```
+
+### POST E PUT de livros
+Da mesma forma, o que muda são os caminhos e o json
+```
+http://localhost:3000/api/books
+```
+ou para PUT
+```
+http://localhost:3000/api/books/id
+```
+No corpo raw e json
+```
+{"title": "nome do livro",
+"author": "nome do author",
+"year": "ano"
+}
 ```
 
 ## Considerações Finais
